@@ -6,28 +6,32 @@ import (
 )
 
 type timeShard struct {
-	Separator string
-	Layout    string
-	Time      time.Time
+	formatter
+	Layout string
+	Time   time.Time
 }
 
-func (f *timeShard) Update() {
-	f.Time = time.Now()
+func (t *timeShard) Update() {
+	t.Time = time.Now()
 }
 
-func (f timeShard) Format(s ...string) string {
+func (t timeShard) Format(s ...string) string {
 	if len(s) == 0 {
 		return ""
+	} else if len(s) >= 2 {
+		return t.formatter.Format(s...)
 	}
-	return fmt.Sprintf("%s%s%s", s[0], f.Separator,
-		f.Time.Format(f.Layout))
+	return fmt.Sprintf("%s%s%s", s[0], t.Separator,
+		t.Time.Format(t.Layout))
 }
 
-func NewTimeShard(s, l string) Shard {
+func NewTimeShard(sep, layout string) Shard {
 	ret := &timeShard{
-		Separator: s,
-		Layout:    l,
-		Time:      time.Now(),
+		formatter: formatter{
+			Separator: sep,
+		},
+		Layout: layout,
+		Time:   time.Now(),
 	}
 	return ret
 }

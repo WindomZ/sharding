@@ -6,37 +6,37 @@ import (
 )
 
 type hashShard struct {
-	Separator string
-	Offset    uint32
-	Range     uint32
+	formatter
+	Offset uint32
+	Range  uint32
 }
 
-func (f *hashShard) Update() {
+func (h *hashShard) Update() {
 }
 
-func (f hashShard) Format(s ...string) string {
+func (h hashShard) Format(s ...string) string {
 	if len(s) == 0 {
 		return ""
 	} else if len(s) == 1 {
 		return s[0]
+	} else if len(s) >= 3 {
+		return h.formatter.Format(s...)
 	}
-	return fmt.Sprintf("%s%s%d", s[0], f.Separator,
-		f.Offset+crc32.ChecksumIEEE([]byte(s[1]))%f.Range)
+	return fmt.Sprintf("%s%s%d", s[0], h.Separator,
+		h.Offset+crc32.ChecksumIEEE([]byte(s[1]))%h.Range)
 }
 
-func NewHashShard(s string, o, r uint32) Shard {
+func NewHashShard(sep string, offset, limit uint32) Shard {
 	ret := &hashShard{
-		Separator: s,
+		formatter: formatter{
+			Separator: sep,
+		},
 	}
-	if o < 0 {
-		ret.Offset = 0
+	ret.Offset = uint32(offset)
+	if limit <= 0 {
+		ret.Range = 1
 	} else {
-		ret.Offset = uint32(o)
-	}
-	if r < 0 {
-		ret.Range = 0
-	} else {
-		ret.Range = uint32(r)
+		ret.Range = uint32(limit)
 	}
 	return ret
 }
