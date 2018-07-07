@@ -1,0 +1,22 @@
+language: go
+
+sudo: false
+
+go:
+  - "1.7"
+  - "1.8"
+  - "1.9"
+  - master
+
+before_install:
+#  - go get github.com/golang/lint/golint
+  - go get -t -v ./...
+
+script:
+  - diff -u <(echo -n) <(gofmt -s -d ./)
+  - diff -u <(echo -n) <(go vet ./...)
+#  - diff -u <(echo -n) <(golint ./...)
+  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
