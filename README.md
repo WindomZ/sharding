@@ -1,5 +1,10 @@
 # sharding
 
+> Simple sharding tables fo Go.
+
+[![Build Status](https://travis-ci.org/WindomZ/sharding.svg?branch=master)](https://travis-ci.org/WindomZ/sharding)
+[![codecov](https://codecov.io/gh/WindomZ/sharding/branch/master/graph/badge.svg)](https://codecov.io/gh/WindomZ/sharding)
+
 ## Install
 
 ```bash
