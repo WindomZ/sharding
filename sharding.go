@@ -5,6 +5,7 @@ import "strings"
 type Shard interface {
 	Update()
 	Format(s ...string) string
+	ShiftFormat(i int64, s ...string) string
 }
 
 type formatter struct {

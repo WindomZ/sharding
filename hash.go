@@ -26,6 +26,22 @@ func (h hashShard) Format(s ...string) string {
 		h.Offset+crc32.ChecksumIEEE([]byte(s[1]))%h.Range)
 }
 
+func (h hashShard) ShiftFormat(i int64, s ...string) string {
+	if len(s) == 0 {
+		return ""
+	} else if len(s) == 1 {
+		return s[0]
+	} else if len(s) >= 3 {
+		return h.formatter.Format(s...)
+	}
+	r := h.Offset + crc32.ChecksumIEEE([]byte(s[1]))
+	if i != 0 {
+		r += uint32(i)
+	}
+	return fmt.Sprintf("%s%s%d", s[0], h.Separator,
+		r%h.Range)
+}
+
 func NewHashShard(sep string, offset, limit uint32) Shard {
 	ret := &hashShard{
 		formatter: formatter{

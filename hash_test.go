@@ -29,3 +29,13 @@ func TestHashShard_Format(t *testing.T) {
 
 	assert.Equal(t, "hello_golang_world", testHash.Format("hello", "golang", "world"))
 }
+
+func TestHashShard_ShiftFormat(t *testing.T) {
+	assert.Equal(t, "", testHash.ShiftFormat(0))
+	assert.Equal(t, "hello", testHash.ShiftFormat(0, "hello"))
+
+	assert.Equal(t, "hello_2", testHash.ShiftFormat(-1, "hello", "world"))
+	assert.Equal(t, "hello_36", testHash.ShiftFormat(1, "hello", "golang"))
+
+	assert.Equal(t, "hello_golang_world", testHash.ShiftFormat(100, "hello", "golang", "world"))
+}
